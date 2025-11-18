@@ -1,0 +1,2 @@
+# CryptoCurrencyPrediction
+Information Retrieval project
