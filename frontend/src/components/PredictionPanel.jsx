@@ -23,14 +23,24 @@ export default function PredictionPanel() {
       setLoading(false);
     }
   };
+  const now = new Date();
+  const nextHour = new Date(now);
+  nextHour.setHours(now.getHours() + 1, 0, 0, 0); // next hour, minutes = 0
+  const targetTimeStr = nextHour.toLocaleString("en-US", {
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: true,
+    day: "numeric",
+    month: "short",
+  });
 
   return (
     <section className="panel prediction-panel">
       <h2>Prediction</h2>
-      <p className="panel-subtitle">Hit the button to get a closed price prediction.</p>
+      <p className="panel-subtitle">Hit the button to get a closed price prediction for <strong>{targetTimeStr}</strong>.</p>
 
       <button className="primary-btn" onClick={handlePredict} disabled={loading}>
-        {loading ? "Predicting..." : "Predict"}
+        {loading ? <span className="loader"></span> : "Predict"}
       </button>
 
       <div className="result-box">
