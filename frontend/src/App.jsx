@@ -8,6 +8,7 @@ const API_URL = "http://127.0.0.1:8000";
 export default function App() {
   const [selectedCoin, setSelectedCoin] = useState("ethereum");
   const [selectedCurrency, setSelectedCurrency] = useState("usd");
+  const [selectedDay, setSelectedDay] = useState(7);
   const [availableTickers, setAvailableTickers] = useState([]);
   const [availableCurrencies, setAvailableCurrencies] = useState([]);
   useEffect(() => {
@@ -46,13 +47,19 @@ export default function App() {
             options={availableTickers}
             onChange={setSelectedCoin}
           />
+          <CustomDropdown
+            label="Days"
+            value={selectedDay}
+            options={['1','2','3','4','5','6','7']}
+            onChange={setSelectedDay}
+          />
         </div>
 
       </header>
 
       <main className="content">
         <PredictionPanel />
-        <CryptoChart coin={selectedCoin} currency={selectedCurrency}/>
+        <CryptoChart coin={selectedCoin} currency={selectedCurrency} days={selectedDay}/>
       </main>
 
       <footer className="app-footer">

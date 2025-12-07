@@ -15,7 +15,7 @@ import {
 ChartJS.register(LineElement, CategoryScale, LinearScale, PointElement, Filler, Tooltip, Legend);
 
 
-export default function CryptoChart({ coin, currency}) {
+export default function CryptoChart({ coin, currency, days}) {
   const [labels, setLabels] = useState([]);
   const [prices, setPrices] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -23,7 +23,7 @@ export default function CryptoChart({ coin, currency}) {
     try {
       setLoading(true);
 
-      const url = `https://api.coingecko.com/api/v3/coins/${coin}/market_chart?vs_currency=${currency}&days=7`;
+      const url = `https://api.coingecko.com/api/v3/coins/${coin}/market_chart?vs_currency=${currency}&days=${days}`;
       const res = await fetch(url);
       const data = await res.json();
 
@@ -46,6 +46,9 @@ export default function CryptoChart({ coin, currency}) {
       setPrices(vals);
     } catch (err) {
       console.error("Chart load error:", err);
+      setLabels(["Error"]);
+      setPrices([0]); // dummy value for rendering
+      //setChartError("Failed to load chart data."); // optional state for tooltip
     } finally {
       setLoading(false);
     }
@@ -53,7 +56,7 @@ export default function CryptoChart({ coin, currency}) {
 
   useEffect(() => {
     loadData();
-  }, [coin, currency]);
+  }, [coin, currency, days]);
 
   const chartData = {
     labels,
@@ -120,7 +123,7 @@ export default function CryptoChart({ coin, currency}) {
         </button>
         <h2>{coin.charAt(0).toUpperCase() + coin.slice(1)} Price by CoinGecko</h2>
       </div>
-      <p className="panel-subtitle">Hourly price data for the last 7 days.</p>
+      <p className="panel-subtitle">Hourly price data for the last {days} day{days > 1 ? 's': ''}.</p>
 
       <div style={{ height: "300px" }}>
         <Line data={chartData} options={chartOptions} />
