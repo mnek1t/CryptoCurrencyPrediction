@@ -8,21 +8,9 @@ import services.trading.technical_indicators as technical_indicators
 from constants import FEATURES
 import database
 from datetime import datetime
-
-app = FastAPI()
-origins = [
-    "http://localhost:3000"
-]
-
-
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=origins,
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
-#model = joblib.load("eth_xgb_model.pkl")
+import xgboost
+from sklearn.preprocessing import StandardScaler
+import joblib
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -31,35 +19,56 @@ async def lifespan(app: FastAPI):
     database.close_db()
 
 app = FastAPI(lifespan=lifespan)
+origins = [
+    "http://localhost:3000",
+    "http://localhost:80"
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+model = joblib.load("./model/eth_xgb_model.pkl")
+scaler = joblib.load("./model/scaler.pkl")
 
 @app.get("/predict")
 async def predict_price():
+    # 1. Get OHLCV Data from Polygon.io API
     df = polygon.get_latest_market_data() 
     
-    # 2. Compute indicators
+    # 2. Compute tehnical trading indicators
     df = compute_indicators(df)
-    print(df.head())
-    print(df.tail())
+    
+    # 3. Convert timestamp to cyclic features
+    technical_indicators.convert_time(df)
+    df.pop('timestamp')
+
+    # 4. Get news from API and calculate sentiment score
+    if 'sentiment' not in df.columns:
+        df['sentiment'] = 0  # default to 0
     
     # 3. Prepare features
-    X = df[FEATURES.values()].iloc[-1:].values
+    X = df[df.columns].iloc[-1:].values
     print(X)
-    
+    X_scaled = scaler.transform(X)
     # 4. Predict
-    #predicted_close = model.predict(X)[0]
+    predicted_close = float(model.predict(X_scaled)[0])
     
-     # 5. Save to DB
+    # 5. Save to DB
     row = {
         "timestamp": datetime.now(),
         "model_name": 'eth_xgb_model',
         "ticker": 'X:ETHUSD',
-        "predicted_close": 3001.42,
+        "predicted_close": predicted_close,
         "actual_close": None
     }
     await database.get_predictions_col().insert_one(row)
     
     return {
-        "predicted_next_close": 3001.42
+        "predicted_next_close": predicted_close
     }
 
 @app.get('/api/ticker')

@@ -1,5 +1,5 @@
 import pandas as pd
-
+import numpy as np
 def calculate_obv(df: pd.DataFrame):
     obv = [0]
     for i in range(1, len(df)):
@@ -34,3 +34,13 @@ def calculate_rsi(df: pd.DataFrame, period: int = 14):
 
 def calculate_sma(df: pd.DataFrame, period: int = 50):
     df[f'SMA_{period}'] = df['closed'].rolling(window=period).mean()
+
+def convert_time(df: pd.DataFrame):
+    df['timestamp'] = pd.to_datetime(df['timestamp'])
+    df['hour'] = df['timestamp'].dt.hour
+    df['dayofweek'] = df['timestamp'].dt.dayofweek
+
+    df['hour_sin'] = np.sin(2 * np.pi * df['hour']/24)
+    df['hour_cos'] = np.cos(2 * np.pi * df['hour']/24)
+    df['dow_sin']  = np.sin(2 * np.pi * df['dayofweek']/7)
+    df['dow_cos']  = np.cos(2 * np.pi * df['dayofweek']/7)
