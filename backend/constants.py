@@ -17,7 +17,7 @@ FEATURES = {
 # POLYGON API CONSTANTS
 MULTIPLIER = 1
 TIMESPAN = "hour"
-PLAN_DATE = datetime.today() - timedelta(days=1)
+PLAN_DATE = datetime.today() - timedelta(days=2)
 TO = PLAN_DATE.strftime(DATE_FORMAT)
 FROM = (PLAN_DATE - timedelta(hours=50)).strftime(DATE_FORMAT)
 POLYGON_URL = "https://api.polygon.io"
