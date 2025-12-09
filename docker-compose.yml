@@ -1,7 +1,6 @@
 version: "3.9"
 
 services:
-
   mongo:
     image: mongo:7
     restart: always
@@ -19,12 +18,9 @@ services:
     restart: always
     env_file:
     - ./.env
-    environment:
-      MONGO_URI: ${MONGO_URI}
-      MONGO_DB: ${MONGO_DB}
-      POLYGON_API_KEY: ${POLYGON_API_KEY}
     volumes:
-      - ./backend/model:/app/model       
+      - ./backend/model:/app/model 
+      - ./.env:/app/.env      
     depends_on:
       - mongo
     ports:
