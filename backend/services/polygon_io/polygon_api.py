@@ -1,13 +1,13 @@
 import dotenv
 import requests
 import pandas as pd
-from constants import COIN_NAME, CURRENCY, POLYGON_URL, MULTIPLIER, TIMESPAN, FROM, TO 
+from constants import COIN_NAME, CURRENCY, MULTIPLIER, TIMESPAN, FROM, TO 
 from typing import Any, Dict
 
 def get_latest_market_data(entries : int = 50) -> pd.DataFrame:
     polygonApiKey = dotenv.get_key(".env", "POLYGON_API_KEY")
-
-    url = f"{POLYGON_URL}/v2/aggs/ticker/X:{COIN_NAME}{CURRENCY}/range/{MULTIPLIER}/{TIMESPAN}/{FROM}/{TO}"
+    polygonUrl = dotenv.get_key(".env", "POLYGON_URL")
+    url = f"{polygonUrl}/v2/aggs/ticker/X:{COIN_NAME}{CURRENCY}/range/{MULTIPLIER}/{TIMESPAN}/{FROM}/{TO}"
     response : requests.Response = requests.get(
         url=url,
         params={

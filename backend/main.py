@@ -81,11 +81,6 @@ async def get_available_tickers():
             "USD"
         }
     }
-   
-
-    # return {
-    #     "predicted_next_close": float(pred)
-    # }
 
 def compute_indicators(df: pd.DataFrame):
     technical_indicators.calculate_atr(df)

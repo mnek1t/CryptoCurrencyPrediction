@@ -11,7 +11,6 @@ COPY . /app
 COPY ./model /app/model
 COPY ./database /app/database
 
-
 # Expose FastAPI port
 EXPOSE 8000
 

@@ -16,7 +16,7 @@ export default function PredictionPanel() {
       if (!res.ok) throw new Error("Backend error");
 
       const data = await res.json();
-      setPrediction(data.predicted_next_close || JSON.stringify(data));
+      setPrediction(Math.round(data.predicted_next_close  * 100)/100|| JSON.stringify(data));
     } catch (err) {
       setError("Failed to fetch prediction.");
     } finally {
