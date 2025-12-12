@@ -53,11 +53,8 @@ uvicorn app.main:app --reload --host ${APP_HOST:-127.0.0.1} --port ${APP_PORT:-8
 
 ---
 
-## API Endpoints
-GET /health  
+## API Endpoints 
 POST /predict  
-GET /models  
-POST /train  
 
 ---
 
