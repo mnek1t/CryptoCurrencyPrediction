@@ -17,6 +17,7 @@ The backend provides:
 
 ## Project Structure
 backend/
+
 ├── app/            
 ├── models/          
 ├── scripts/          
@@ -25,10 +26,11 @@ backend/
 └── requirements.txt
 
 frontend/
+
 ├── app/            
 ├── public/          
-
 docker-compose.yml
+
 ---
 
 ##  Installation
