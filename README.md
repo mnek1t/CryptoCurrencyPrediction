@@ -1,5 +1,6 @@
 # CryptoCurrencyPrediction — Backend
 Information Retrieval(English)(1),25/26-R
+
 A clean, modern, and well‑structured backend powering the **CryptoCurrencyPrediction** project.  
 Handles **data ingestion**, **model training**, and **cryptocurrency price prediction APIs**.
 
