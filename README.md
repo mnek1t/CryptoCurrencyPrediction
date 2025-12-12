@@ -17,11 +17,12 @@ The backend provides:
 
 ## Project Structure
 backend/
-├── app/            # API application  
-├── models/         # Saved ML models  
-├── scripts/        # Training + data scripts  
-├── data/           # Raw & processed data  
-├── configs/        # Config files  
+
+├── app/            
+├── models/          
+├── scripts/          
+├── data/            
+├── configs/        
 └── requirements.txt
 
 ---
